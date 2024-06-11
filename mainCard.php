@@ -14,12 +14,13 @@ function TestCard($cardNumber):string{
         new BankCard('/^4[0-9]{12}([0-9]{3})?$/', 'Visa', $cardNumber)
     ];
     foreach($cards as $card) {
-        if ($card->typeCard())
+        $isValidCard = $card->alghLyna();
+        if ($card->typeCard($isValidCard))
         {
-            return 'Карта соответствует платежной системе  '.$card->setCardType();
+            return 'Карта соответствует платежной системе  '.$card->getCardType();
         }
     }
     return 'Проверьте правильность ввода данных  '. $cardNumber;
 }
 
-print TestCard('1213124242255')."\n";
+print TestCard('124525352352352352')."\n";

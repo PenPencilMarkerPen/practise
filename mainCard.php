@@ -1,23 +1,17 @@
 <?php
 
-require_once('Card/Cards/CardCredit.php');
-require_once('Card/Cards/CardMaestro.php');
-require_once('Card/Cards/CardMasterCard.php');
-require_once('Card/Cards/CardVisa.php');
+require_once('Card/Cards/BankCard.php');
 
-use CardCredit\CardCredit;
-use CardMasterCard\CardMasterCard;
-use CardVisa\CardVisa;
-use CardMaestro\CardMaestro;
+use BankCard\BankCard;
 
 
 
-function TestCard($number_card){
+function TestCard($cardNumber){
     $cards = [
-        new CardCredit($number_card),
-        new CardMasterCard($number_card),
-        new CardVisa($number_card),
-        new CardMaestro($number_card)
+        new BankCard('/^(14|81|99)\d{12}$/', 'Даронь Кредит', $cardNumber),
+        new BankCard('/^(5018|5020|5038|5893|6304|6759|6761|6762|6763)\d{8,15}$/', 'Maestro', $cardNumber),
+        new BankCard('/^5[1-5][0-9]{14}$/', 'MasterCard', $cardNumber),
+        new BankCard('/^4[0-9]{12}([0-9]{3})?$/', 'Visa', $cardNumber)
     ];
     foreach($cards as $card) {
         if ($card->typeCard())
@@ -25,7 +19,7 @@ function TestCard($number_card){
             return "Карта соответствует платежной системе ".$card->setCardType();
         }
     }
-    return "Проверьте правильность ввода данных $number_card";
+    return "Проверьте правильность ввода данных $cardNumber";
 }
 
-print TestCard('1234567891324567')."\n";
+print TestCard('1213124242255')."\n";

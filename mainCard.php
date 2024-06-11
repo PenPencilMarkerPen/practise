@@ -14,7 +14,7 @@ function TestCard($cardNumber):string{
         new BankCard('/^4[0-9]{12}([0-9]{3})?$/', 'Visa', $cardNumber)
     ];
     foreach($cards as $card) {
-        $isValidCard = $card->alghLyna();
+        $isValidCard = $card->algValidate();
         if ($card->typeCard($isValidCard))
         {
             return 'Карта соответствует платежной системе  '.$card->getCardType();

@@ -3,14 +3,14 @@
 namespace BankCard;
 
 require_once 'Card.php';
-require_once 'CardLogic.php';
+require_once 'CardInterface.php';
 
 use Card\Card;
-use CardLogic\CardLogic;
+use CardInterface\CardInterface;
 
-class  BankCard extends Card implements CardLogic {
+class  BankCard extends Card implements CardInterface {
 
-    public function alghLyna():bool
+    public function algValidate():bool
     {
         $sum = 0;
         $cardLength = strlen($this->cardNumber)-1;

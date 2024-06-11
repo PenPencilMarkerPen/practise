@@ -4,5 +4,5 @@ namespace CardLogic;
 
 interface CardLogic {
 
-    public function alghLyna();
+    public function alghLyna():bool;
 }

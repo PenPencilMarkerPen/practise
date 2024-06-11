@@ -10,7 +10,7 @@ use CardLogic\CardLogic;
 
 class  BankCard extends Card implements CardLogic {
 
-    public function alghLyna()
+    public function alghLyna():bool
     {
         $sum = 0;
         $cardLength = strlen($this->cardNumber)-1;

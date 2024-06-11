@@ -15,12 +15,12 @@ abstract class Card {
         $this->cardNumber = $cardNumber; 
     }
 
-    public function setCardType()
+    public function setCardType():string
     {
         return $this->cardType;
     }
     
-    public function setCardNumber()
+    public function setCardNumber():string
     {
         return $this->cardNumber;
     }

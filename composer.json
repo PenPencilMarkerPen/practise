@@ -1,0 +1,17 @@
+{
+  "name": "user/practise",
+  "autoload": {
+    "psr-4": {
+      "User\\Practise\\": "/"
+    }
+  },
+  "authors": [
+    {
+      "name": "User",
+      "email": "test@gmail.com"
+    }
+  ],
+  "require": {
+    "phpmailer/phpmailer": "^6.9"
+  }
+}

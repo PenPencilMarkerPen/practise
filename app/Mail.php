@@ -1,63 +1,63 @@
 <?php
+namespace Mail;
 
 require __DIR__.'/../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+abstract class Mail {   
 
-function validateMail($email_a):bool
-{
-    return (filter_var($email_a, FILTER_VALIDATE_EMAIL))? true:false;
-}
-
-function validateInputs($email, $name, $text, $subject):bool
-{
-    return validateMail($email) && !empty($name) && !empty($text) && !empty($subject);
-}
-
-
-function sendMail($email, $name, $text, $subject, $path=NULL):string{
-    $config = parse_ini_file(__DIR__.'/../config.ini', true);
-
-    $isValidateInputs =  validateInputs($email, $name, $text, $subject);
-
-    if (!$isValidateInputs)
+    private $mail;
+    private $name;
+    private $config;
+    
+    function __construct($name,$config)
     {
-        return 'Проверьте корректность ввода данных';
+        $this->name = $name;
+        $this->config=$config;
+        $this->mail = new PHPMailer(true); 
+        $this->mailConfig();
     }
 
-    $mail = new PHPMailer(true); 
+    public function mailConfig()
+    {
+        try {
+            $this->mail->isSMTP();
+            $this->mail->Host = $this->config['mail']['host'];
+            $this->mail->SMTPAuth = true;
+            $this->mail->Username =  $this->config['mail']['username'];
+            $this->mail->Password = $this->config['mail']['password'];
+            $this->mail->SMTPSecure = $this->config['mail']['secure'];
+            $this->mail->Port = $this->config['mail']['port'];
+            $this->mail->setFrom($this->config['mail']['username'],$this->name);
+        }
+        catch (Exception $e) {
+            return 'Exception: ' . $e->getMessage();
+        }
+    }
 
-    try {
-
-        $mail->isSMTP();
-        $mail->Host = $config['mail']['host'];
-        $mail->SMTPAuth = true;
-        $mail->Username =  $config['mail']['username'];
-        $mail->Password = $config['mail']['password'];
-        $mail->SMTPSecure = $config['mail']['secure'];
-        $mail->Port = $config['mail']['port'];
-        $mail->setFrom($config['mail']['username'],$name);
-        $mail->addAddress($email);
-        $mail->Subject = $subject;
-        $mail->Body = $text;
-
+    public function addFile($path)
+    {
         if (!empty($path) && file_exists($path))
         {
-            $mail->addAttachment($path);
+            $this->mail->addAttachment($path);
         }
+        else {
+            return 'Нет такого файла!';
+        }
+    }
 
-        if($mail->send()){
+    public function sendMail($email, $text, $subject)
+    {
+        $this->mail->addAddress($email);
+        $this->mail->Subject = $subject;
+        $this->mail->Body = $text;
+        if($this->mail->send()){
             return 'Сообщение отправлено';
         }
         else {
             return 'Попробуйте снова!';
         }
-
-    } catch (Exception $e) {
-        return 'Exception: ' . $e->getMessage();
     }
 }
-
-

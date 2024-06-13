@@ -9,12 +9,10 @@ use PHPMailer\PHPMailer\Exception;
 abstract class Mail {   
 
     private $mail;
-    private $name;
     private $config;
-    
-    function __construct($name,$config)
+
+    function __construct($config)
     {
-        $this->name = $name;
         $this->config=$config;
         $this->mail = new PHPMailer(true); 
         $this->mailConfig();
@@ -30,7 +28,6 @@ abstract class Mail {
             $this->mail->Password = $this->config['mail']['password'];
             $this->mail->SMTPSecure = $this->config['mail']['secure'];
             $this->mail->Port = $this->config['mail']['port'];
-            $this->mail->setFrom($this->config['mail']['username'],$this->name);
         }
         catch (Exception $e) {
             return 'Exception: ' . $e->getMessage();
@@ -48,8 +45,9 @@ abstract class Mail {
         }
     }
 
-    public function sendMail($email, $text, $subject)
+    public function sendMail($email,$name, $text, $subject)
     {
+        $this->mail->setFrom($this->config['mail']['username'],$name);
         $this->mail->addAddress($email);
         $this->mail->Subject = $subject;
         $this->mail->Body = $text;
